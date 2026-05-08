@@ -1,0 +1,15 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Only the admin can read/write everything. Anyone can read policies.
+    match /policies/{policyId} {
+      allow read: if true;
+      allow write: if request.auth != null && request.auth.token.email == "sajaldahal112@gmail.com" && request.auth.token.email_verified == true;
+    }
+    
+    // Catch all rule
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
