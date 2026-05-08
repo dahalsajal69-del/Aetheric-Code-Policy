@@ -15,7 +15,7 @@ export function Layout() {
               <ShieldCheck size={20} />
             </div>
             <span className="font-serif font-semibold text-xl tracking-tight text-gray-900 group-hover:text-gray-700 transition-colors">
-              {developerName}
+              {developerName} Apps Policy
             </span>
           </Link>
           <nav className="flex items-center gap-4">
