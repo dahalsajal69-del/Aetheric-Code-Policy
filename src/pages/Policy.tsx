@@ -1,13 +1,25 @@
+import { useState } from "react";
 import { useParams, Navigate, Link } from "react-router-dom";
 import Markdown from "react-markdown";
-import { ArrowLeft, FileText, Calendar, Smartphone } from "lucide-react";
+import { ArrowLeft, FileText, Calendar, Smartphone, Share2, Check } from "lucide-react";
 import { usePolicies } from "../hooks/usePolicies";
 
 export function Policy() {
   const { appId } = useParams();
   const { policies, loading } = usePolicies();
+  const [copied, setCopied] = useState(false);
   
   const app = policies.find((a) => a.id === appId);
+
+  const handleShare = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      console.error("Failed to copy!", err);
+    }
+  };
 
   if (loading) {
     return (
@@ -37,11 +49,19 @@ export function Policy() {
             <div className="bg-white p-3 rounded-xl border border-gray-200 shadow-sm text-gray-700">
               <Smartphone size={28} />
             </div>
-            <div>
+            <div className="flex-1">
               <h1 className="text-2xl sm:text-3xl font-serif font-bold text-gray-900">
                 {app.name}
               </h1>
             </div>
+            <button
+              onClick={handleShare}
+              className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition-colors shadow-sm"
+              title="Copy policy link"
+            >
+              {copied ? <Check size={16} className="text-green-600" /> : <Share2 size={16} />}
+              <span className="hidden sm:inline">{copied ? "Copied!" : "Share Link"}</span>
+            </button>
           </div>
           <div className="flex flex-wrap gap-4 text-sm font-medium text-gray-500">
             <div className="flex items-center gap-1.5">
